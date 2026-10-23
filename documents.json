@@ -1,11 +1,45 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "partner-statement",
+    "title": "Packaging balance statement draft",
+    "for_each": "select id,code from packaging.locations where kind='partner' order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Recorded balance",
+        "note": "Reconcile against the partner record before sending. No statement is sent by this system.",
+        "sql": "select item,quantity,last_movement from packaging.balances where location_id=$1 order by item"
+      },
+      {
+        "title": "Unreturned issues",
+        "sql": "select reference,item,outstanding,due_on from packaging.returns_due where partner=(select code from packaging.locations where id=$1) order by due_on"
+      }
+    ]
+  },
+  {
+    "name": "movement-docket",
+    "title": "Packaging movement docket",
+    "for_each": "select id,reference from packaging.movements order by reference",
+    "file": "reference",
+    "sections": [
+      {
+        "title": "Recorded movement",
+        "note": "Operator-entered record, not proof of physical handover or an electronic signature.",
+        "sql": "select m.reference,m.moved_on,f.name origin,t.name destination,i.name item,m.quantity,m.evidence_ref,m.actor,m.note from packaging.movements m join packaging.locations f on f.id=m.from_id join packaging.locations t on t.id=m.to_id join packaging.items i on i.id=m.item_id where m.id=$1"
+      }
+    ]
+  },
+  {
+    "name": "count-reconciliation",
+    "title": "Packaging count reconciliation",
+    "for_each": "select id,location||'-'||item code from packaging.reconciliations order by location,item",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Count and ledger",
+        "note": "A variance does not change stock. Review the source and record an authorised correction separately.",
+        "sql": "select * from packaging.reconciliations where id=$1"
+      }
     ]
   }
 ]

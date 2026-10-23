@@ -1,13 +1,40 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Returnable Packaging for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Packaging week",
+    "subtitle": "Recorded movements and unresolved returns. Fictional demo until replaced.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Returns to chase",
+        "sql": "select reference,partner,item,outstanding,due_on,state from packaging.returns_due order by due_on nulls first,reference"
+      },
+      {
+        "title": "Disputes",
+        "sql": "select title,owner,due_on from packaging.disputes where status='open' order by due_on"
+      },
+      {
+        "title": "Evidence and count checks",
+        "sql": "select * from packaging.compliance order by rule,record"
+      }
+    ]
+  },
+  {
+    "name": "balances",
+    "title": "Packaging balances",
+    "subtitle": "Units by location and packaging type. System opening sources excluded.",
+    "sections": [
+      {
+        "title": "Balances",
+        "sql": "select location,item,quantity,last_movement from packaging.balances where kind<>'system' order by location,item"
+      },
+      {
+        "title": "Physical counts",
+        "sql": "select location,item,counted_on,counted,ledger_now_for_date,variance,backdated_change from packaging.reconciliations order by location,item"
+      },
+      {
+        "title": "Food-contact packaging observations",
+        "note": "An observation is not a release certificate. The 30-day interval is a local review policy.",
+        "sql": "select location,item,quantity,checked_on,state from packaging.hygiene order by location,item"
       }
     ]
   }

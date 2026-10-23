@@ -1,0 +1,2 @@
+Number,Item,Quantity,From,To,Date,Status,Reference,Carrier
+DEMO-900,PALLET,12,DEPOT,BAY,2026-01-02,Processed,DOCKET-900,Fictional carrier

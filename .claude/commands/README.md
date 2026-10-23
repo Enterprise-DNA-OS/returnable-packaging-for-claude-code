@@ -1,5 +1,3 @@
-# Slash commands
+# Packaging recipes
 
-One file per recurring job. Each command tells Claude Code exactly which CLI command to run and how to present the result, so the operator never re-explains the job.
-
-Add a command every time the same ask comes twice. Frontmatter needs a `description:` line. The body is the brief.
+These 30 recipes use the same CLI for Claude Code, Codex, OpenCode and Cursor. Read CLAUDE.md first. Commands are documented in docs/cli.md. No recipe sends messages or releases physical stock.
